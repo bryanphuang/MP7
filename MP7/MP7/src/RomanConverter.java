@@ -11,12 +11,45 @@ public class RomanConverter {
 	public static void main(String[] args) {
 		String romanNumerals;
 		int inputNum;
+		String inString;
 		Scanner input = new Scanner(System.in);
-		System.out.println("Enter a number!");
-		inputNum = input.nextInt();
-		System.out.println("Output:" + "\n" + toRoman(inputNum));
-		romanNumerals  = toRoman(inputNum);
-		System.out.println("Input:"+ "\n" +convertNumber(romanNumerals));
+		boolean isRoman;
+		boolean validInput = false;
+		
+		
+		while(!validInput) {
+			System.out.println("Will this be a roman numeral? (Y/N)");
+			
+			inString = input.nextLine().toUpperCase();
+			isRoman = inString.equals("Y");
+			validInput = inString.equals("N") || isRoman;
+		
+			if (isRoman) {
+				System.out.println("Enter a roman numeral");
+				romanNumerals = input.nextLine();
+				
+				if (validRoman(romanNumerals)) {
+					System.out.println("Your number as a digital number:"+ "\n" +convertNumber(romanNumerals));
+				} else {
+					System.out.println("Not a valid roman numeral.");
+					validInput = false;
+				}
+								
+			} else if (validInput) {
+				System.out.println("Enter a number!");
+				inputNum = input.nextInt();
+				System.out.println("Your number as a roman numeral:" + "\n" + toRoman(inputNum));
+			} else {
+				System.out.println("Invalid input. Try again.");
+				
+			}
+			
+		}
+
+	}
+	
+	public static boolean validRoman(String roman) {
+		return roman.matches("^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$");
 	}
 
 	public static int convertNumber(String romanNumerals) {
