@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class RomanConverter {
@@ -9,46 +10,98 @@ public class RomanConverter {
 	 */
 
 	public static void main(String[] args) {
-		String romanNumerals;
-		int inputNum;
-		String inString;
+		String numeral1 = null;
+		String numeral2 = null;
+		String operation = null;
 		Scanner input = new Scanner(System.in);
-		boolean isRoman;
 		boolean validInput = false;
 		
-		
-		while(!validInput) {
-			System.out.println("Will this be a roman numeral? (Y/N)");
-			
-			inString = input.nextLine().toUpperCase();
-			isRoman = inString.equals("Y");
-			validInput = inString.equals("N") || isRoman;
-		
-			if (isRoman) {
-				System.out.println("Enter a roman numeral");
-				romanNumerals = input.nextLine();
-				
-				if (validRoman(romanNumerals)) {
-					System.out.println("Your number as a digital number:"+ "\n" +convertNumber(romanNumerals));
-				} else {
-					System.out.println("Not a valid roman numeral.");
-					validInput = false;
-				}
-								
-			} else if (validInput) {
-				System.out.println("Enter a number!");
-				inputNum = input.nextInt();
-				System.out.println("Your number as a roman numeral:" + "\n" + toRoman(inputNum));
+		while (!validInput) {
+			System.out.println("Enter the first numeral.");
+			numeral1 = input.nextLine();
+			if (validRoman(numeral1)) {
+				validInput = true;
+				System.out.println("Input 1: " + numeral1);
 			} else {
-				System.out.println("Invalid input. Try again.");
-				
+				System.out.println("Invalid input.");
+			}
+		}
+		
+		validInput = false;
+		
+		while (!validInput) {
+			System.out.println("Enter the second numeral.");
+			numeral2 = input.nextLine();
+			if (validRoman(numeral2)) {
+				validInput = true;
+				System.out.println("Input 2: " + numeral2);
+			} else {
+				System.out.println("Invalid input.");
+			}
+			
+		}
+		
+		validInput = false;
+		
+		while (!validInput) {
+			System.out.println("Enter the operation (+, -, *).");
+			operation = input.nextLine();
+			if (validOperation(operation)) {
+				validInput = true;
+				System.out.println("Operation: " + operation);
+			} else {
+				System.out.println("Invalid input.");
 			}
 			
 		}
 
+		System.out.println("Result:");
+		System.out.print(numeral1 + " " + operation + " " + numeral2 + " = ");
+		
+		if (operation.equals("+")) {
+			System.out.println(AddRomNums(numeral1, numeral2));
+		} else if (operation.equals("-")) {
+			System.out.println(SubtractRomNums(numeral1, numeral2));
+		} else {
+			System.out.println(MultiplyRomNums(numeral1, numeral2));
+		}
 	}
 	
-	public static boolean validRoman(String roman) {
+	public static String AddRomNums(String Input_1, String Input_2) {
+		int addInputNum_1 = convertNumber(Input_1);
+		int addInputNum_2 = convertNumber(Input_2);
+		int addOutput = addInputNum_1 + addInputNum_2;
+		String romAddOutput = toRoman(addOutput);
+		return romAddOutput;
+	}
+	
+	public static String MultiplyRomNums(String Input_1, String Input_2) {
+		int multInputNum_1 = convertNumber(Input_1);
+		int multInputNum_2 = convertNumber(Input_2);
+		int multOutput = multInputNum_1 * multInputNum_2;
+		String romMultOutput = toRoman(multOutput);
+		return romMultOutput;
+	}
+	
+	public static String SubtractRomNums(String Input_1, String Input_2) {
+		int subInputNum_1 = convertNumber(Input_1);
+		int subInputNum_2 = convertNumber(Input_2);
+		int subOutput = 0;
+		if (subInputNum_1 > subInputNum_2) {
+			subOutput = subInputNum_1 - subInputNum_2;
+			String romSubOutput = toRoman(subOutput);
+			return romSubOutput;
+		}
+		else {
+			return "Negative numeral.";
+		}
+	}
+	
+	private static boolean validOperation(String operation) {
+		return operation.equals("*") || operation.equals("+") || operation.equals("-");
+	}
+
+	public static boolean validRoman(String roman) {		
 		return roman.matches("^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$");
 	}
 
